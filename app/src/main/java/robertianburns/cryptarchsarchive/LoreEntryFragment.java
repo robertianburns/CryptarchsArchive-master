@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class LoreEntryFragment extends Fragment {
     private final ManifestDatabase database;
-    private LoreEntrySelectionInformation info;
+    private LoreEntrySelectionInformation entrySelectionInformation;
 
     /**
      * Instantiates a new Lore fragment.
@@ -30,7 +30,6 @@ public class LoreEntryFragment extends Fragment {
     public LoreEntryFragment() {
         database = ManifestDatabase.getInstance(getActivity());
     }
-
 
     /**
      * Creates the <b>Lore Entry/lore_entry.</b>
@@ -49,18 +48,18 @@ public class LoreEntryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.lore_entry, container, false);
+        View entryView = inflater.inflate(R.layout.lore_entry, container, false);
         try {
-            final TextView loreText = view.findViewById(R.id.entryText);
-            final Thread getLore = new Thread(new Runnable() {
+            final TextView entryTextView = entryView.findViewById(R.id.entryText);
+            final Thread getLoreEntry = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         ArrayList<Long> arraylist = new ArrayList<>();
-                        arraylist.add(info.getLoreEntryID());
+                        arraylist.add(entrySelectionInformation.getEntryID());
                         DataAccessObject_LoreEntryDefinition dataAccessObjectLoreDefinition = database.getDao().getLoreById(arraylist).get(0);
-                        String text = dataAccessObjectLoreDefinition.getJson().getAsJsonObject("displayProperties").get("description").getAsString();
-                        loreText.setText(text);
+                        String entryText = dataAccessObjectLoreDefinition.getJson().getAsJsonObject("displayProperties").get("description").getAsString();
+                        entryTextView.setText(entryText);
 
                     } catch (Exception e) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -74,32 +73,32 @@ public class LoreEntryFragment extends Fragment {
             });
 
 //          Start a new thread to get the lore.
-            getLore.start();
+            getLoreEntry.start();
 
-//          Get the lore title and lore description.
-            TextView title = view.findViewById(R.id.entryTitle);
-            title.setText(info.getLoreEntryName());
+//          Get the lore entry title and lore description.
+            TextView entryTitle = entryView.findViewById(R.id.entryTitle);
+            entryTitle.setText(entrySelectionInformation.getEntryName());
 
-//          Wait for the getLore thread to die, so all information is properly gathered.
-            getLore.join();
+//          Wait for the getLoreEntry thread to die, so all information is properly gathered.
+            getLoreEntry.join();
+            return entryView;
 
-            return view;
         } catch (Exception exception) {
 //          Show a Toast if loading the Lore Entry failed.
             Toast.makeText(getActivity(), "Unable to load Lore Entry", Toast.LENGTH_LONG).show();
-            return view;
+            return entryView;
         }
     }
 
 
     /**
-     * Sets the LoreEntrySelectionInformation as the information of the Lore Entry.
+     * Sets the EntrySelectionInformation as the information of the Lore Entry.
      *
      * @return LoreEntrySelectionInformation.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public void setInfo(LoreEntrySelectionInformation info) {
-        this.info = info;
+    public void setEntrySelectionInformation(LoreEntrySelectionInformation entrySelectionInformation) {
+        this.entrySelectionInformation = entrySelectionInformation;
     }
 }

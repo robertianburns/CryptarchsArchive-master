@@ -3,8 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="grimoire_card_image">Grimoire Card image</string>
     <string name="card_name_unavailable">(Card name unavailable)</string>
-    <string name="no_quote_available">(No quote available)</string>
-    <string name="no_reference_available">(No reference available)</string>
+    <string name="no_quote_available">(Card quote unavailable)</string>
+    <string name="no_reference_available">(Card reference unavailable)</string>
     <string name="card_text_unavailable">(Card text unavailable)</string>
     <string name="header_text_unavailable">(Header text unavailable)</string>
     <string name="no_text_available">(Card text unavailable)</string>
@@ -31,4 +31,18 @@
     <string name="dusk_and_dawn">Dusk and Dawn</string>
     <string name="the_darkness_image_button">The Darkness Image Button</string>
     <string name="the_darkness">The Darkness</string>
+    <string name="cryptarch_s_archive_s_splash_screen">\'Cryptarch\'s Archive\'\'s splash screen</string>
+    <string name="cryptarch_s_archive_splash_screen">Cryptarch\'s Archive splash screen</string>
+    <string name="lore_background">Lore background</string>
+    <string name="archive">ARCHIVE</string>
+    <string name="mute_music">Mute music</string>
+    <string name="select_for_destiny_1_lore">PRESS FOR DESTINY 1 LORE</string>
+    <string name="select_for_destiny_2_lore">PRESS FOR DESTINY 2 LORE</string>
+    <string name="click_to_view_destiny_1_lore">View Destiny 1 Lore</string>
+    <string name="destiny_1_menu_background">Destiny 1 menu background</string>
+    <string name="destiny_2_menu_background">Destiny 2 menu background</string>
+    <string name="click_to_view_destiny_2_lore">View Destiny 2 Lore</string>
+    <string name="change_theme">Change theme</string>
+    <string name="switch_to_destiny_1_menu">Switch to Destiny 1 menu</string>
+    <string name="switch_to_destiny_2_menu">Switch to Destiny 2 menu</string>
 </resources>

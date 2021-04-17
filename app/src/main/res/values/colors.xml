@@ -3,5 +3,6 @@
     <color name="backgroundColour">#f8f8f8</color>
     <color name="grimoireIconTextColour">#FFF</color>
     <color name="textColour">#000</color>
-    <color name="loreSectionSelectedColour">#6E7FBA</color>sss
+    <color name="loreSectionSelectedColour">#80F44336</color>
+    <color name="splashColours">#FFF</color>sss
 </resources>

@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +39,7 @@ public class LoreEntrySelectionFragment extends Fragment {
      * @version 1.0.0
      * @since 1.0.0
      */
-    private String loreBookName;
+    private String bookName;
 
     /**
      * The Lore Book icon ID.
@@ -48,7 +47,7 @@ public class LoreEntrySelectionFragment extends Fragment {
      * @version 1.0.0
      * @since 1.0.0
      */
-    private int loreBookIconID;
+    private int bookIconID;
 
     /**
      * The lore entry selection IDs.
@@ -56,7 +55,7 @@ public class LoreEntrySelectionFragment extends Fragment {
      * @version 1.0.0
      * @since 1.0.0
      */
-    private long[] loreEntrySelectionIDs;
+    private long[] entrySelectionIDs;
 
     /**
      * Instantiates a new LoreEntrySelection fragment.
@@ -89,17 +88,13 @@ public class LoreEntrySelectionFragment extends Fragment {
         View view = inflater.inflate(R.layout.lore_entryselection_header, container, false);
 
         try {
-
-            ImageView loreBookIcon = view.findViewById(R.id.bookIconHEADER);
-            loreBookIconID = getImageResource(loreBookName);
-            loreBookIcon.setImageResource(loreBookIconID);
-
-            TextView header = view.findViewById(R.id.bookNameHEADER);
-            header.setText(loreBookName);
+            bookIconID = getImageResource(bookName);
+            TextView bookNameHeader = view.findViewById(R.id.bookNameHeader);
+            bookNameHeader.setText(bookName);
 
             RecyclerView recyclerView = view.findViewById(R.id.entryList);
-            LoreEntrySelectionAdapter loreEntrySelectionAdapter = new LoreEntrySelectionAdapter(getActivity(), createLoreEntrySelectionInformationList(), getFragmentManager());
-            recyclerView.setAdapter(loreEntrySelectionAdapter);
+            LoreEntrySelectionAdapter entrySelectionAdapter = new LoreEntrySelectionAdapter(getActivity(), createEntrySelectionInformationList(), getFragmentManager());
+            recyclerView.setAdapter(entrySelectionAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
             return view;
@@ -117,18 +112,18 @@ public class LoreEntrySelectionFragment extends Fragment {
      * @since 1.0.0
      */
     public void setName(String name) {
-        this.loreBookName = name;
+        this.bookName = name;
     }
 
     /**
-     * Sets entryFragment.setloreEntrySelectionIDs in LoreBookSelectionAdapter.
+     * Sets entryFragment.setEntrySelectionIDs in LoreBookSelectionAdapter.
      *
-     * @param loreEntrySelectionIDs The lore entry selection IDs
+     * @param entrySelectionIDs The lore entry selection IDs
      * @version 1.0.0
      * @since 1.0.0
      */
-    public void setloreEntrySelectionIDs(long[] loreEntrySelectionIDs) {
-        this.loreEntrySelectionIDs = loreEntrySelectionIDs;
+    public void setEntrySelectionIDs(long[] entrySelectionIDs) {
+        this.entrySelectionIDs = entrySelectionIDs;
     }
 
     /**
@@ -138,28 +133,28 @@ public class LoreEntrySelectionFragment extends Fragment {
      * @version 1.0.0
      * @since 1.0.0
      */
-    private List<LoreEntrySelectionInformation> createLoreEntrySelectionInformationList() {
-        final ArrayList<LoreEntrySelectionInformation> loreEntrySelectionInformationList = new ArrayList<>(Arrays.asList(new LoreEntrySelectionInformation[loreEntrySelectionIDs.length - 1]));
+    private List<LoreEntrySelectionInformation> createEntrySelectionInformationList() {
+        final ArrayList<LoreEntrySelectionInformation> entrySelectionInformationList = new ArrayList<>(Arrays.asList(new LoreEntrySelectionInformation[entrySelectionIDs.length - 1]));
 
-        ThreadGroup getLoreEntrySelectionInformation = new ThreadGroup("getLoreEntrySelectionInformation");
+        ThreadGroup getEntrySelectionInformation = new ThreadGroup("getEntrySelectionInformation");
 
-        for (int i = 1; i < loreEntrySelectionIDs.length; i++) {
+        for (int i = 1; i < entrySelectionIDs.length; i++) {
             final int index = i;
-            final long id = loreEntrySelectionIDs[i];
+            final long id = entrySelectionIDs[i];
 
-            new Thread(getLoreEntrySelectionInformation, new Runnable() {
+            new Thread(getEntrySelectionInformation, new Runnable() {
                 @Override
                 public void run() {
                     try {
                         ArrayList<Long> arraylist = new ArrayList<>();
                         arraylist.add(id);
-                        DataAccessObject_LoreEntrySelectionDefinition loreEntrySelection = database.getDao().getRecordById(arraylist).get(0);
-                        JsonObject loreEntrySelectionJson = loreEntrySelection.getJson();
+                        DataAccessObject_LoreEntrySelectionDefinition entrySelection = database.getDao().getRecordById(arraylist).get(0);
+                        JsonObject entrySelectionJson = entrySelection.getJson();
 
-                        String loreEntryName = loreEntrySelectionJson.getAsJsonObject("displayProperties").get("name").getAsString();
-                        long loreEntryID = convertHash(loreEntrySelectionJson.get("loreHash").getAsLong());
+                        String entryName = entrySelectionJson.getAsJsonObject("displayProperties").get("name").getAsString();
+                        long entryID = convertHash(entrySelectionJson.get("loreHash").getAsLong());
 
-                        loreEntrySelectionInformationList.set(index - 1, new LoreEntrySelectionInformation(loreBookIconID, loreBookName, loreEntryName, loreEntryID));
+                        entrySelectionInformationList.set(index - 1, new LoreEntrySelectionInformation(bookIconID, bookName, entryName, entryID));
 
                     } catch (Exception e) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -172,24 +167,18 @@ public class LoreEntrySelectionFragment extends Fragment {
                 }
             }).start();
         }
-
-        // Hardcoded lore entries to fix missing lore entries.
-        if (loreBookName.equals("Marasenna")) {
-            loreEntrySelectionInformationList.add(new LoreEntrySelectionInformation(loreBookIconID, loreBookName, "Palingenesis III", 445714340));
-        } else if (loreBookName.equals("The Awoken of the Reef")) {
-            loreEntrySelectionInformationList.add(0, new LoreEntrySelectionInformation(loreBookIconID, loreBookName, "Revanche I", 445714341));
-        }
-        return loreEntrySelectionInformationList;
+        return entrySelectionInformationList;
     }
 
     /**
      * Converts the hash for 'presentationNode'.
      * <p>
-     * This converts the hash identifier of the Presentation Node for whom we should return
-     * details for using a convert hash method.
+     * This converts the hash identifier of the Presentation Node for whom we should return details
+     * for using a convert hash method.
      * <p>
-     * When entities refer to each other in Destiny content, it is this hash that they are
-     * referring to.
+     * Hashes are unique identifier for Destiny entities, and are guaranteed to be unique for the
+     * type of entity, but not globally. When entities refer to each other in Destiny content, it
+     * is this hash that they are referring to.
      *
      * @param hash The hash identifier of the Presentation Node.
      * @return The converted Presentation Node hash identifier.
@@ -208,13 +197,13 @@ public class LoreEntrySelectionFragment extends Fragment {
     /**
      * Gets the image of the Lore Book.
      *
-     * @param name the name
+     * @param name The name of the Lore Book.
      * @return The image of the Lore Book.
      * @version 1.0.0
      * @since 1.0.0
      */
     private int getImageResource(String name) {
-        String fileName = name.replaceAll("[^a-zA-Z0-9 ]", "").replaceAll(" ", "_").toLowerCase();
-        return getResources().getIdentifier(fileName, "drawable", getActivity().getPackageName());
+        String imageFileName = name.replaceAll("[^a-zA-Z0-9 ]", "").replaceAll(" ", "_").toLowerCase();
+        return getResources().getIdentifier(imageFileName, "drawable", getActivity().getPackageName());
     }
 }

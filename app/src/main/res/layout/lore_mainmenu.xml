@@ -5,17 +5,24 @@
     android:id="@+id/loreBooksActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColour"
     tools:context=".LoreMainmenuActivity">
+
+    <ImageView
+        android:id="@+id/loreBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:contentDescription="@string/lore_background"
+        android:scaleType="fitXY"
+        android:src="@drawable/d2background" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bottomborder"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,16 +31,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="6dp"
             android:layout_weight="1"
+            android:background="@drawable/buttonsquareheader"
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/theLightButton"
+                android:id="@+id/sectionButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
+                android:layout_margin="5dp"
+                android:background="@drawable/borderbox"
                 android:contentDescription="@string/the_light_image_button"
                 android:onClick="showBooks"
                 android:src="@drawable/the_light"
@@ -42,25 +49,27 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/the_light"
+                android:text="THE LIGHT"
                 android:textAlignment="center"
-                android:textColor="@color/textColour" />
+                android:textColor="@color/textColour"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="6dp"
             android:layout_weight="1"
+            android:background="@drawable/buttonsquareheader"
             android:orientation="vertical">
 
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
+                android:layout_margin="5dp"
+                android:background="@drawable/borderbox"
                 android:contentDescription="@string/dusk_and_dawn_image_button"
                 android:onClick="showBooks"
                 android:src="@drawable/dusk_and_dawn"
@@ -69,25 +78,27 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/dusk_and_dawn"
+                android:text="DUSK AND DAWN"
                 android:textAlignment="center"
-                android:textColor="@color/textColour" />
+                android:textColor="@color/textColour"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="6dp"
             android:layout_weight="1"
+            android:background="@drawable/buttonsquareheader"
             android:orientation="vertical">
 
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
+                android:layout_margin="5dp"
+                android:background="@drawable/borderbox"
                 android:contentDescription="@string/the_darkness_image_button"
                 android:onClick="showBooks"
                 android:src="@drawable/the_darkness"
@@ -96,10 +107,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/the_darkness"
+                android:text="THE DARKNESS"
                 android:textAlignment="center"
-                android:textColor="@color/textColour" />
+                android:textColor="@color/textColour"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -109,14 +122,9 @@
         android:id="@+id/bookArea"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
 
 </android.support.constraint.ConstraintLayout>

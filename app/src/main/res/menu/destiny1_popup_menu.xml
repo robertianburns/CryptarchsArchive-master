@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/original"
+        android:title="Original" />
+
+    <item
+        android:id="@+id/theDarkBelow"
+        android:title="The Dark Below" />
+
+    <item
+        android:id="@+id/houseOfWolves"
+        android:title="House of Wolves" />
+
+    <item
+        android:id="@+id/theTakenKing"
+        android:title="The Taken King" />
+
+    <item
+        android:id="@+id/riseOfIron"
+        android:title="Rise of Iron" />
+</menu>

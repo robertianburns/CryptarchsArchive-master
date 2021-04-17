@@ -16,11 +16,11 @@ public class GrimoireCardActivity extends AppCompatActivity {
     /**
      * Creates the <b>Grimoire Card/grimoire_card.</b>
      * <p>
-     * This method grabs specific objects and compiles them all to create a Grimoire Card for
-     * Destiny 1. A Grimoire Card is compiled from:
+     * This method grabs specific objects and compiles them all to create a Destiny 1 Grimoire
+     * Card. A Grimoire Card is compiled from:
      * <ul>
      *     <li>cardImageFile, the image associated with the Grimoire Card.</li>
-     *     <li>cardName, the name associated with the Grimoire Card.</li>
+     *     <li>cardName, the name associated with the Grimoire Card.</li>getCardJson
      *     <li>cardQuote, the quote associated with the Grimoire Card.</li>
      *     <li>cardQuoteReference, the quote reference associated with the Grimoire Card.</li>
      *     <li>cardDescription, the description associated with the Grimoire Card.</li>
@@ -29,7 +29,6 @@ public class GrimoireCardActivity extends AppCompatActivity {
      * @param savedInstanceState If the activity is being re-initialized after previously being
      *                           shut down, then this Bundle contains the data it most recently
      *                           supplied in onSaveInstanceState(Bundle).
-     * @return The chosen Grimoire Card.
      * @version 1.0.0
      * @since 1.0.0
      */
@@ -42,9 +41,9 @@ public class GrimoireCardActivity extends AppCompatActivity {
             JsonObject cardJson = GrimoireContainer.getObject().getCardJson();
 
 //          Set the card's image source.
-            int cardImageFile = getImage(cardJson.get("cardId").toString());
-            ImageView cardImage = findViewById(R.id.cardImage);
-            cardImage.setImageResource(cardImageFile);
+            int cardImage = getImage(cardJson.get("cardId").toString());
+            ImageView cardImageView = findViewById(R.id.cardImage);
+            cardImageView.setImageResource(cardImage);
 
 //          Set the card's name text.
             String cardName = cardJson.get("cardName").toString();
@@ -56,29 +55,25 @@ public class GrimoireCardActivity extends AppCompatActivity {
             if (cardJson.get("cardIntro") != null) {
                 String cardQuote = parseHTML(cardJson.get("cardIntro").toString());
                 cardQuote = cardQuote.substring(1, cardQuote.length() - 1);
-                TextView cardIntroText = findViewById(R.id.cardQuote);
-                cardIntroText.setText(cardQuote);
-                cardIntroText.setVisibility(View.VISIBLE);
+                TextView cardQuoteTextView = findViewById(R.id.cardQuote);
+                cardQuoteTextView.setText(cardQuote);
+                cardQuoteTextView.setVisibility(View.VISIBLE);
             }
             if (cardJson.get("cardIntroAttribution") != null) {
                 String cardQuoteReference = parseHTML(cardJson.get("cardIntroAttribution").toString());
                 cardQuoteReference = cardQuoteReference.substring(1, cardQuoteReference.length() - 1);
-                TextView cardIntroAttributionText = findViewById(R.id.cardQuoteReference);
-                cardIntroAttributionText.setText(cardQuoteReference);
-                cardIntroAttributionText.setVisibility(View.VISIBLE);
+                TextView cardQuoteReferenceTextView = findViewById(R.id.cardQuoteReference);
+                cardQuoteReferenceTextView.setText(cardQuoteReference);
+                cardQuoteReferenceTextView.setVisibility(View.VISIBLE);
             }
 
 //          Set the card's description text.
-            if (cardJson.get("cardDescription") != null) {
-                String cardDescription = parseHTML(cardJson.get("cardDescription").toString());
-                cardDescription = cardDescription.substring(1, cardDescription.length() - 1);
-                TextView cardDescriptionText = findViewById(R.id.cardDescription);
-                cardDescriptionText.setText(cardDescription);
-            } else {
-                findViewById(R.id.cardDescriptionArea).setVisibility(View.GONE);
-            }
+            String cardDescription = parseHTML(cardJson.get("cardDescription").toString());
+            cardDescription = cardDescription.substring(1, cardDescription.length() - 1);
+            TextView cardDescriptionTextView = findViewById(R.id.cardDescription);
+            cardDescriptionTextView.setText(cardDescription);
         } catch (Exception exception) {
-            Toast.makeText(this, "Unable to load Grimoire Card", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "ERROR CODE APPLE: Unable to create Grimoire Card", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -86,8 +81,8 @@ public class GrimoireCardActivity extends AppCompatActivity {
      * Parses the Grimoire Card description.
      * <p>
      * As there are words and phrases which are bolded (<b>like this<b/>) or italicised
-     * (<i>like this<i/>) with HTML tags in Bungie's Grimoire Card descriptions, the HTML must be
-     * parsed so these don't appear as plain text.
+     * (<i>like this<i/>) with HTML tags in Destiny 1's Grimoire Card descriptions, the HTML must
+     * be parsed to prevent these appearing as plain text.
      *
      * @return The parsed HTML for the retrieved description.
      * @version 1.0.0
@@ -113,11 +108,11 @@ public class GrimoireCardActivity extends AppCompatActivity {
      * @version 1.0.0
      * @since 1.0.0
      */
-    private int getImage(String fileName) {
+    private int getImage(String imageFileName) {
         Resources resources = getResources();
-        if (Character.isDigit(fileName.charAt(0))) {
-            fileName = 'c' + fileName;
+        if (Character.isDigit(imageFileName.charAt(0))) {
+            imageFileName = 'c' + imageFileName;
         }
-        return resources.getIdentifier(fileName, "drawable", getPackageName());
+        return resources.getIdentifier(imageFileName, "drawable", getPackageName());
     }
 }

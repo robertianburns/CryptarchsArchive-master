@@ -2,48 +2,44 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundColour"
-    android:paddingLeft="8dp"
-    android:paddingTop="8dp"
-    android:paddingRight="8dp">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/loreBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:contentDescription="@string/lore_background"
+        android:scaleType="fitXY"
+        android:src="@drawable/d2background" />
 
     <LinearLayout
         android:id="@+id/bookHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bottomborder"
         android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/bookIconHEADER"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="false"
-            android:contentDescription="@string/lore_book_header_icon"
-            android:scaleType="fitCenter"
-            android:src="@drawable/the_man_they_call_cayde" />
-
         <TextView
-            android:id="@+id/bookNameHEADER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/bookNameHeader"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@drawable/buttonsquareheader"
             android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:lines="2"
+            android:padding="5dp"
             android:text="@string/lore_book_name_unavailable"
             android:textAlignment="gravity"
             android:textColor="@color/textColour"
-            android:textSize="26sp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:textStyle="bold"
+            app:autoSizeMaxTextSize="34sp"
+            app:autoSizeMinTextSize="26sp"
+            app:autoSizeStepGranularity="1sp"
+            app:autoSizeTextType="uniform" />
 
     </LinearLayout>
 
@@ -51,7 +47,6 @@
         android:id="@+id/entryList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
         android:textColor="@color/textColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

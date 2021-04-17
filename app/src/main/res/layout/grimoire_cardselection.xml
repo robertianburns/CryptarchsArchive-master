@@ -7,19 +7,25 @@
     android:background="@color/backgroundColour"
     tools:context="robertianburns.cryptarchsarchive.GrimoireCardSelectionActivity">
 
+    <ImageView
+        android:id="@+id/loreBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:contentDescription="Cardselection background"
+        android:scaleType="fitXY"
+        android:src="@drawable/d1background" />
+
     <robertianburns.cryptarchsarchive.HeaderGridView
         android:id="@+id/selectionGridView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
-        android:paddingStart="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp"
         android:verticalSpacing="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

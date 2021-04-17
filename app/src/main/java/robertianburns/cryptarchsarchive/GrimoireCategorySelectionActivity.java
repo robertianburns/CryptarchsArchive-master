@@ -1,5 +1,6 @@
 package robertianburns.cryptarchsarchive;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The 'GrimoireCategorySelectionActivity' class for the Destiny 1 Grimoire GrimoireCardSelectionActivity.
+ * The 'categorySelectionActivity' class for the Grimoire Card selection Activity.
  * <p>
- * Sets the category selection for the Grimoire GrimoireCardSelectionActivity, and also the header for the category title.
+ * Sets the category selection for cardSelectionActivity, and also the header for the category
+ * title.
  *
  * @version 1.0.0
  * @since 1.0.0
@@ -35,89 +37,85 @@ public class GrimoireCategorySelectionActivity extends AppCompatActivity {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    adapterList = createList();
+                    adapterList = createCategorySelectionList();
                 }
             });
             thread.start();
 
             HeaderGridView gridView = findViewById(R.id.selectionGridView);
+            @SuppressLint("InflateParams") LinearLayout categoryHeader = (LinearLayout) getLayoutInflater().inflate(R.layout.grimoire_categoryselection_header, null);
 
-            LinearLayout header = (LinearLayout) getLayoutInflater().inflate(R.layout.grimoire_categoryselection_header, null);
+//          Create the Grimoire category selection header with the Grimoire Section (theme) text.
+            TextView categoryHeaderText = (TextView) categoryHeader.getChildAt(0);
+            String headerText = getIntent().getStringExtra("themeTag");
+            headerText = headerText.substring(0, 1).toUpperCase() + headerText.substring(1);
 
-            TextView label = (TextView) header.getChildAt(0);
-            String theme = getIntent().getStringExtra("themeTag");
-            theme = theme.substring(0, 1).toUpperCase() + theme.substring(1);
-            label.setText(theme);
-
-            gridView.addHeaderView(header);
+            categoryHeaderText.setText(headerText);
+            gridView.addHeaderView(categoryHeader);
             try {
                 thread.join();
             } catch (InterruptedException interruptedexception) {
                 interruptedexception.printStackTrace();
             }
-            GrimoireCategorySelectionAdapter grimoireCategorySelectionAdapter = new GrimoireCategorySelectionAdapter(this, adapterList);
-            gridView.setAdapter(grimoireCategorySelectionAdapter);
+            GrimoireCategorySelectionAdapter categorySelectionAdapter = new GrimoireCategorySelectionAdapter(this, adapterList);
+            gridView.setAdapter(categorySelectionAdapter);
         } catch (Exception exception) {
-            Toast.makeText(this, "Unable to load Grimoire GrimoireCategorySelectionActivity", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "ERROR CODE KIWI: Unable to setup Grimoire Category selection", Toast.LENGTH_LONG).show();
         }
-
     }
 
     /**
-     * Creates the pageCollection list.
+     * Creates the Grimoire category selection list.
      * <p>
-     * This method gets a JSON object (page) from pageCollection, converts that into a string, and
-     * adds that into an arraylist of page books. This is repeated until the size of the page
-     * collection has been reduced to 0.
+     * This method gets a JSON object (category), converts that into a
+     * string, and adds that into an arraylist of categories. This is repeated until the size of
+     * the categories collection has been reduced to 0.
      *
      * @return The pageCollection list.
      * @version 1.0.0
      * @since 1.0.0
      */
-    private List<String> createList() {
-        ArrayList<String> pageNameList = new ArrayList<>();
+    private List<String> createCategorySelectionList() {
+        ArrayList<String> categorySelectionList = new ArrayList<>();
         try {
-            JsonArray pageCollection = grimoire.getPageCollection();
+            JsonArray categorySelectionCollection = grimoire.getCategoryCollection();
 
-            for (int i = 0; i < pageCollection.size(); i++) {
-                JsonObject page = (JsonObject) pageCollection.get(i);
+            for (int i = 0; i < categorySelectionCollection.size(); i++) {
+                JsonObject category = (JsonObject) categorySelectionCollection.get(i);
+                String categorySelectionName = category.get("pageName").getAsString();
 
-                String name = page.get("pageName").getAsString();
-                pageNameList.add(name);
+                categorySelectionList.add(categorySelectionName);
             }
-            return pageNameList;
+            return categorySelectionList;
 
         } catch (Exception exception) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(GrimoireCategorySelectionActivity.this, "Error Loading Grimoire GrimoireCategorySelectionActivity", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GrimoireCategorySelectionActivity.this, "ERROR CODE PAPAYA: Unable to create Grimoire Category selection list", Toast.LENGTH_LONG).show();
                 }
             });
-            return pageNameList;
+            return categorySelectionList;
         }
-
-
     }
 
     /**
-     * Shows the Destiny 1 Grimoire Card.
+     * Shows the Grimoire Category selection cards and gives them intents.
      * <p>
-     * This method supplies a tag for this view containing a String (page), which is to be later
-     * retrieved with View.getTag(). The page is set with this tag and the page is added as
-     * extended data to the new intent.
+     * This method dynamically creates a new intent and activity. This supplies a tag for this view
+     * containing a String (page), which is to be later retrieved with View.getTag(). The page is
+     * set with this tag and the page is added as extended data to the new intent.
      *
-     * @param view The view of the card.
+     * @param view The view of the Grimoire Category selection card.
      * @version 1.0.0
      * @since 1.0.0
      */
     public void showCard(View view) {
-        String page = view.getTag().toString();
-
-        grimoire.setPage(page);
+        String card = view.getTag().toString();
+        grimoire.setCategory(card);
 
         Intent intent = new Intent(GrimoireCategorySelectionActivity.this, GrimoireCardSelectionActivity.class);
-        intent.putExtra("pageTag", page);
+        intent.putExtra("pageTag", card);
         startActivity(intent);
     }
 }

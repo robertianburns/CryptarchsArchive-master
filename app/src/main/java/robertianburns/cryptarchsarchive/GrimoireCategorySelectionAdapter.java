@@ -12,59 +12,59 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * The 'GrimoireCategorySelectionAdapter' class for Destiny 1 GrimoireCardSelectionActivity.
+ * The 'GrimoireCategorySelectionAdapter' class for the Grimoire Card selection Activity.
  * <p>
  * This class extends BaseAdapter, so an Adapter can be used and customised. Base Adapter is a
  * common base class of a general implementation of an Adapter and is used in ListView, GridView,
  * Spinner, and so forth. As an adapter is a bridge between the User Interface and data sources, it
  * can be used to fill data in User Interface components. It pulls data from database or an array
  * and sends  data to an adapter view to send it to a view. A view can show this data on different
- * Views Like ListView, GridView, Spinner, RecyclerView, et cetera, many of which Cryptarch's
+ * views Like ListView, GridView, Spinner, RecyclerView, et cetera, many of which Cryptarch's
  * Archive uses.
  *
  * @version 1.0.0
  * @since 1.0.0
  */
 public class GrimoireCategorySelectionAdapter extends BaseAdapter {
-    private final List<String> grimoireCategorySelectionList;
+    private final List<String> categorySelectionList;
     private final Activity activity;
 
     /**
      * Instantiates a new GrimoireCategorySelectionActivity adapter.
      *
-     * @param activity                      The activity.
-     * @param grimoireCategorySelectionList The page name list.
+     * @param activity              The activity.
+     * @param categorySelectionList The category name list.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public GrimoireCategorySelectionAdapter(Activity activity, List<String> grimoireCategorySelectionList) {
-        this.grimoireCategorySelectionList = grimoireCategorySelectionList;
+    public GrimoireCategorySelectionAdapter(Activity activity, List<String> categorySelectionList) {
+        this.categorySelectionList = categorySelectionList;
         this.activity = activity;
     }
 
     /**
      * Gets how many items are in the data set represented by this Adapter.
      *
-     * @return Count of grimoireCategorySelectionList items.
+     * @return Count of categorySelectionList items.
      * @version 1.0.0
      * @since 1.0.0
      */
     @Override
     public int getCount() {
-        return grimoireCategorySelectionList.size();
+        return categorySelectionList.size();
     }
 
     /**
      * Get the data item associated with the specified position in the data set.
      *
      * @param position The position of the item whose data we want within the adapter's data set.
-     * @return The grimoireCategorySelectionList data at the specified position.
+     * @return The categorySelectionList data at the specified position.
      * @version 1.0.0
      * @since 1.0.0
      */
     @Override
     public String getItem(int position) {
-        return grimoireCategorySelectionList.get(position);
+        return categorySelectionList.get(position);
     }
 
     /**
@@ -81,9 +81,9 @@ public class GrimoireCategorySelectionAdapter extends BaseAdapter {
     }
 
     /**
-     * Initialises and sets the <b>Grimoire Card selection icons/grimoire_cardselection_icon.</b>
+     * Initialises and sets the <b>Grimoire Category selection icons/grimoire_selection_icon.</b>
      * <p>
-     * This method instantiates the 'grimoire_cardselection_icon' XML file into its corresponding
+     * This method instantiates the 'grimoire_selection_icon' XML file into its corresponding
      * View object.
      *
      * @param position    Position of the Grimoire Card selection icon.
@@ -100,8 +100,7 @@ public class GrimoireCategorySelectionAdapter extends BaseAdapter {
 
         if (convertView == null) {
             view = new ViewHolder();
-            convertView = inflater.inflate(R.layout.grimoire_cardselection_icon, parent, false);
-
+            convertView = inflater.inflate(R.layout.grimoire_selection_icon, parent, false);
             view.imageButtonText = convertView.findViewById(R.id.imageButtonText);
             view.imageButtonIcon = convertView.findViewById(R.id.imageButtonIcon);
 
@@ -110,12 +109,12 @@ public class GrimoireCategorySelectionAdapter extends BaseAdapter {
             view = (GrimoireCategorySelectionAdapter.ViewHolder) convertView.getTag();
         }
 
-        String grimoireCategoryName = grimoireCategorySelectionList.get(position);
-        view.imageButtonText.setText(grimoireCategoryName);
-        int pageImageID = getImage(grimoireCategoryName);
+        String categoryName = categorySelectionList.get(position);
+        view.imageButtonText.setText(categoryName);
+        int categoryImageID = getImage(categoryName);
 
-        view.imageButtonIcon.setImageBitmap(BitmapFactory.decodeResource(activity.getResources(), pageImageID));
-        view.imageButtonIcon.setTag(grimoireCategoryName);
+        view.imageButtonIcon.setImageBitmap(BitmapFactory.decodeResource(activity.getResources(), categoryImageID));
+        view.imageButtonIcon.setTag(categoryName);
         return convertView;
     }
 

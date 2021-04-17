@@ -14,7 +14,7 @@ public class LoreEntrySelectionInformation extends LoreBookSelectionInformation 
      * @version 1.0.0
      * @since 1.0.0
      */
-    private final String loreEntryName;
+    private final String entryName;
 
     /**
      * The Lore entry id.
@@ -22,22 +22,22 @@ public class LoreEntrySelectionInformation extends LoreBookSelectionInformation 
      * @version 1.0.0
      * @since 1.0.0
      */
-    private final long loreEntryID;
+    private final long entryID;
 
     /**
      * Instantiates a new Record info.
      *
-     * @param iconId        The icon ID.
-     * @param nodeName      The node name.
-     * @param loreEntryName The lore entry name.
-     * @param loreEntryID   The lore entry ID.
+     * @param iconId    The icon ID.
+     * @param nodeName  The node name.
+     * @param entryName The lore entry name.
+     * @param entryID   The lore entry ID.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public LoreEntrySelectionInformation(int iconId, String nodeName, String loreEntryName, long loreEntryID) {
+    public LoreEntrySelectionInformation(int iconId, String nodeName, String entryName, long entryID) {
         super(iconId, nodeName);
-        this.loreEntryName = loreEntryName;
-        this.loreEntryID = loreEntryID;
+        this.entryName = entryName;
+        this.entryID = entryID;
     }
 
     /**
@@ -50,8 +50,8 @@ public class LoreEntrySelectionInformation extends LoreBookSelectionInformation 
      * @since 1.0.0
      */
 //  Lore Entry name in the selection menu.
-    public String getLoreEntryName() {
-        return loreEntryName;
+    public String getEntryName() {
+        return entryName;
     }
 
     /**
@@ -63,7 +63,7 @@ public class LoreEntrySelectionInformation extends LoreBookSelectionInformation 
      * @version 1.0.0
      * @since 1.0.0
      */
-    public long getLoreEntryID() {
-        return loreEntryID;
+    public long getEntryID() {
+        return entryID;
     }
 }

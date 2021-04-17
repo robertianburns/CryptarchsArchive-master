@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
  * @since 1.0.0
  */
 public abstract class ManifestDefinition {
-    
+
     /**
      * The ID.
      *

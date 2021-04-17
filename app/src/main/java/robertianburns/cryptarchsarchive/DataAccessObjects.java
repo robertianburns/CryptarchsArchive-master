@@ -6,10 +6,11 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 /**
- * Used to access data objects from Bungie's database.
+ * Used to access data objects from the Destiny 2 Manifest (database), which was retrieved from
+ * Bungie via script.
  * <p>
- * These queries are run when the methods are called. Queries are verified at compile time to
- * ensure that they compile properly against the database.
+ * These queries are run when the methods are called. Queries are verified at compile time to ensure
+ * that they compile properly against the database.
  *
  * @version 1.0.0
  * @since 1.0.0

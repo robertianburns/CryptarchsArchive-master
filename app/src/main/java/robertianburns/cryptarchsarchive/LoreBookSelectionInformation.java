@@ -9,56 +9,56 @@ package robertianburns.cryptarchsarchive;
 public class LoreBookSelectionInformation {
 
     /**
-     * The icon ID.
+     * The book's icon ID.
      *
      * @version 1.0.0
      * @since 1.0.0
      */
-    private final int iconID;
+    private final int bookIconID;
 
     /**
-     * The Node name.
+     * The book name.
      *
      * @version 1.0.0
      * @since 1.0.0
      */
-    private final String nodeName;
+    private final String bookName;
 
     /**
-     * The node ID.
+     * The book ID.
      *
      * @version 1.0.0
      * @since 1.0.0
      */
-    private long nodeID;
+    private long bookID;
 
 
     /**
      * Instantiates a new Presentation node info.
      *
-     * @param iconID   The Lore Book icon ID.
-     * @param nodeName The Lore Book name.
+     * @param bookIconID The Lore Book icon ID.
+     * @param bookName   The Lore Book name.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public LoreBookSelectionInformation(int iconID, String nodeName) {
-        this.iconID = iconID;
-        this.nodeName = nodeName;
+    public LoreBookSelectionInformation(int bookIconID, String bookName) {
+        this.bookIconID = bookIconID;
+        this.bookName = bookName;
     }
 
     /**
      * Instantiates a new Presentation node info.
      *
-     * @param iconID   The Lore Book icon ID.
-     * @param nodeName The Lore Book name.
-     * @param nodeID   The Lore Book ID.
+     * @param bookIconID The Lore Book icon ID.
+     * @param bookName   The Lore Book name.
+     * @param bookID     The Lore Book ID.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public LoreBookSelectionInformation(int iconID, String nodeName, long nodeID) {
-        this.iconID = iconID;
-        this.nodeName = nodeName;
-        this.nodeID = nodeID;
+    public LoreBookSelectionInformation(int bookIconID, String bookName, long bookID) {
+        this.bookIconID = bookIconID;
+        this.bookName = bookName;
+        this.bookID = bookID;
     }
 
     /**
@@ -68,8 +68,8 @@ public class LoreBookSelectionInformation {
      * @version 1.0.0
      * @since 1.0.0
      */
-    public int getIconID() {
-        return iconID;
+    public int getBookIconID() {
+        return bookIconID;
     }
 
     /**
@@ -79,8 +79,8 @@ public class LoreBookSelectionInformation {
      * @version 1.0.0
      * @since 1.0.0
      */
-    public String getNodeName() {
-        return nodeName;
+    public String getBookName() {
+        return bookName;
     }
 
     /**
@@ -90,7 +90,7 @@ public class LoreBookSelectionInformation {
      * @version 1.0.0
      * @since 1.0.0
      */
-    public long getNodeID() {
-        return nodeID;
+    public long getBookID() {
+        return bookID;
     }
 }

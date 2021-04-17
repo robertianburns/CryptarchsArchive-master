@@ -1,5 +1,6 @@
 package robertianburns.cryptarchsarchive;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,19 +17,18 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 
 /**
- * The 'GrimoireCardSelectionActivity' class for the Destiny 1 Grimoire Card selection.
+ * The Activity class for the Destiny 1 Grimoire Card selection.
  *
  * @version 1.0.0
  * @since 1.0.0
  */
 public class GrimoireCardSelectionActivity extends AppCompatActivity {
-    private ArrayList<String> cardIDList;
-    private ArrayList<String> cardNameList;
+    private ArrayList<String> cardIDList, cardNameList;
     private GrimoireContainer grimoire;
     private JsonArray cardCollection;
 
     /**
-     * Initialises and sets the layout for <b>Grimoire categories/grimoire_cardselection.</b>
+     * Initialises and sets the layout for the <b>Grimoire card menu/grimoire_cardselection.xml.</b>
      * <p>
      * This method gets grimoire objects and puts them into a GridView. It creates:
      * <ul>
@@ -40,7 +40,6 @@ public class GrimoireCardSelectionActivity extends AppCompatActivity {
      * @param savedInstanceState If the activity is being re-initialized after previously being
      *                           shut down, then this Bundle contains the data it most recently
      *                           supplied in onSaveInstanceState(Bundle).
-     * @return Grimoire cards for the user to click on.
      * @version 1.0.0
      * @since 1.0.0
      */
@@ -50,44 +49,42 @@ public class GrimoireCardSelectionActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.grimoire_cardselection);
 
-//          Get Grimoire objects and the Grimoire GrimoireCardSelectionActivity.
+//          Get Grimoire objects and the Grimoire Card selection Activity.
             grimoire = GrimoireContainer.getObject();
             cardCollection = grimoire.getCardCollection();
 
 //          Set custom adapter to selectionGridView.
             HeaderGridView gridView = findViewById(R.id.selectionGridView);
-
             LayoutInflater inflater = this.getLayoutInflater();
-            LinearLayout header = (LinearLayout) inflater.inflate(R.layout.grimoire_cardselection_header, null);
+            @SuppressLint("InflateParams") LinearLayout cardSelectionHeader = (LinearLayout) inflater.inflate(R.layout.grimoire_cardselection_header, null);
 
-//          Name of category the user clicked on is displayed at the top of the screen.
+//          The name of category the user clicked on is displayed at the top of the screen.
             String categoryName = getIntent().getStringExtra("pageTag");
             categoryName = categoryName.charAt(0) + categoryName.substring(1);
 
-            TextView label = (TextView) header.getChildAt(0);
-            label.setText(categoryName);
+            TextView headerTextView = (TextView) cardSelectionHeader.getChildAt(0);
+            headerTextView.setText(categoryName);
 
 //          Create the card categories with a new selectionGridView.
             createCardLists();
             GrimoireCardSelectionIconAdapter adapter = new GrimoireCardSelectionIconAdapter(this, cardIDList, cardNameList);
 
 //          Add HeaderView and set the adapter.
-            gridView.addHeaderView(header);
+            gridView.addHeaderView(cardSelectionHeader);
             gridView.setAdapter(adapter);
 
         } catch (Exception exception) {
-            Toast.makeText(this, "Unable to load selection cards", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "ERROR CODE ORANGE: Unable to create Grimoire Card selection", Toast.LENGTH_LONG).show();
         }
     }
 
     /**
-     * Creates categories for Grimoire Cards/'GrimoireCardSelectionActivity'.
-     * <p></p>
+     * Creates the Grimoire Cards selection list.
+     * <p>
      * This method populates two empty array lists (cardIDList and cardNameList) with JSON objects.
      * These JSON objects are got from JSON elements to be given to these two empty array lists as
      * strings.
      *
-     * @return Categories populated with Grimoire Cards.
      * @version 1.0.0
      * @since 1.0.0
      */
@@ -103,13 +100,12 @@ public class GrimoireCardSelectionActivity extends AppCompatActivity {
     }
 
     /**
-     * Shows a Grimoire Card.
+     * Shows the Grimoire Card selection cards and gives them intents.
      * <p></p>
      * This method dynamically creates a new intent and activity. cardID is a string that is set
      * onto a bit of Grimoire, creating a clickable card.
      *
-     * @param view The view the card will be shown in.
-     * @return A Grimoire Card.
+     * @param view The view of the Grimoire Card selection card.
      * @version 1.0.0
      * @since 1.0.0
      */

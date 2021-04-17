@@ -1,5 +1,6 @@
 package robertianburns.cryptarchsarchive;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -12,31 +13,29 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Creates the <b>Grimoire Card icons/grimoire_cardselection_icon.</b>
+ * Creates the <b>Grimoire Card icons/grimoire_selection_icon.xml.</b>
  * <p>
  * This class creates the Grimoire Card icons through getting the amount of Grimoire Cards, getting
  * the Grimoire Card item position, getting Grimoire Card item ID, getting the image from drawable,
  * and setting them all in getView.
  *
  * @version 1.0.0
- * @return Grimoire Card icon.
  * @since 1.0.0
  */
 public class GrimoireCardSelectionIconAdapter extends BaseAdapter {
-    private final List<String> cardIdList;
-    private final List<String> cardNameList;
+    private final List<String> cardIDList, cardNameList;
     private final Activity activity;
 
     /**
      * Instantiates a new Grid view adapter.
      *
      * @param activity     The activity.
-     * @param cardIdList   The card ID list.
+     * @param cardIDList   The card ID list.
      * @param cardNameList The card name list.
      */
-    public GrimoireCardSelectionIconAdapter(Activity activity, List<String> cardIdList, List<String> cardNameList) {
+    public GrimoireCardSelectionIconAdapter(Activity activity, List<String> cardIDList, List<String> cardNameList) {
         super();
-        this.cardIdList = cardIdList;
+        this.cardIDList = cardIDList;
         this.cardNameList = cardNameList;
         this.activity = activity;
     }
@@ -50,7 +49,7 @@ public class GrimoireCardSelectionIconAdapter extends BaseAdapter {
      */
     @Override
     public int getCount() {
-        return cardIdList.size();
+        return cardIDList.size();
     }
 
     /**
@@ -62,7 +61,7 @@ public class GrimoireCardSelectionIconAdapter extends BaseAdapter {
      */
     @Override
     public String getItem(int position) {
-        return cardIdList.get(position);
+        return cardIDList.get(position);
     }
 
     /**
@@ -80,57 +79,58 @@ public class GrimoireCardSelectionIconAdapter extends BaseAdapter {
     /**
      * Gets the image from drawable (the folder containing the images).
      *
-     * @param fileName The filename of the image.
+     * @param imageFileName The filename of the image.
      * @return The image from drawable.
      * @version 1.0.0
      * @since 1.0.0
      */
-    private int getImage(String fileName) {
+    private int getImage(String imageFileName) {
         Resources resources = activity.getResources();
-        if (Character.isDigit(fileName.charAt(0))) {
-            fileName = 'c' + fileName;
+        if (Character.isDigit(imageFileName.charAt(0))) {
+            imageFileName = 'c' + imageFileName;
         }
-        return resources.getIdentifier(fileName, "drawable", activity.getPackageName());
+        return resources.getIdentifier(imageFileName, "drawable", activity.getPackageName());
     }
 
     /**
      * Creates the Grimoire Card icons.
      * <p>
-     * Sets the Grimoire Card icon position and image from the drawable folder.
+     * Sets the Grimoire Card icon position, image text (the white text), and image from the
+     * drawable folder.
      *
      * @param position    The position of the Grimoire Card icon.
      * @param convertView The Grimoire Card icon to inflate (the XML layout to be parsed).
-     * @param parent      The inherited view group (from the superclass GrimoireCardSelectionIconAdapter).
+     * @param parent      The inherited view group (from the superclass cardSelectionIconAdapter).
      * @return The Grimoire Card icon position and image.
      * @version 1.0.0
      * @since 1.0.0
      */
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         GrimoireCardSelectionIconAdapter.ViewHolder view;
-        LayoutInflater inflator = activity.getLayoutInflater();
+        LayoutInflater inflater = activity.getLayoutInflater();
 
         if (convertView == null) {
             view = new ViewHolder();
-            convertView = inflator.inflate(R.layout.grimoire_cardselection_icon, null);
+            convertView = inflater.inflate(R.layout.grimoire_selection_icon, null);
 
-            view.pageText = (TextView) convertView.findViewById(R.id.imageButtonText);
-            view.imageButtonPage = (ImageButton) convertView.findViewById(R.id.imageButtonIcon);
+            view.imageButtonTextView = convertView.findViewById(R.id.imageButtonText);
+            view.imageButtonIcon = convertView.findViewById(R.id.imageButtonIcon);
 
             convertView.setTag(view);
         } else {
             view = (GrimoireCardSelectionIconAdapter.ViewHolder) convertView.getTag();
         }
+        view.imageButtonTextView.setText(cardNameList.get(position));
 
-        view.pageText.setText(cardNameList.get(position));
-        int imageID = getImage(cardIdList.get(position));
-
-        if (cardIdList.get(position).equals("grimoire_cover")) {
-            view.imageButtonPage.setTag("");
-            view.imageButtonPage.setImageResource(imageID);
+        int imageID = getImage(cardIDList.get(position));
+        if (cardIDList.get(position).equals("grimoire_cover")) {
+            view.imageButtonIcon.setTag("");
+            view.imageButtonIcon.setImageResource(imageID);
         } else {
-            view.imageButtonPage.setImageResource(imageID);
-            view.imageButtonPage.setTag(cardIdList.get(position));
+            view.imageButtonIcon.setImageResource(imageID);
+            view.imageButtonIcon.setTag(cardIDList.get(position));
         }
         return convertView;
     }
@@ -142,19 +142,21 @@ public class GrimoireCardSelectionIconAdapter extends BaseAdapter {
      * @since 1.0.0
      */
     public static class ViewHolder {
+
         /**
          * The Image button page.
          *
          * @version 1.0.0
          * @since 1.0.0
          */
-        public ImageButton imageButtonPage;
+        public ImageButton imageButtonIcon;
+
         /**
          * The Page text.
          *
          * @version 1.0.0
          * @since 1.0.0
          */
-        public TextView pageText;
+        public TextView imageButtonTextView;
     }
 }

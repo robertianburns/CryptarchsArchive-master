@@ -18,7 +18,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySelectionAdapter.RecordViewHolder> {
+public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySelectionAdapter.EntrySelectionViewHolder> {
 
     /**
      * The layout inflater.
@@ -42,21 +42,21 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
      * @version 1.0.0
      * @since 1.0.0
      */
-    List<LoreEntrySelectionInformation> recordData;
+    List<LoreEntrySelectionInformation> entrySelectionInformation;
 
     /**
      * Instantiates a new Record adapter.
      *
-     * @param context         The context.
-     * @param recordData      The record data.
-     * @param fragmentManager The fragmentManager.
+     * @param context                   The context.
+     * @param entrySelectionInformation The record data.
+     * @param fragmentManager           The fragmentManager.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public LoreEntrySelectionAdapter(Context context, List<LoreEntrySelectionInformation> recordData, FragmentManager fragmentManager) {
+    public LoreEntrySelectionAdapter(Context context, List<LoreEntrySelectionInformation> entrySelectionInformation, FragmentManager fragmentManager) {
         super();
         this.inflater = LayoutInflater.from(context);
-        this.recordData = recordData;
+        this.entrySelectionInformation = entrySelectionInformation;
         this.fragmentManager = fragmentManager;
     }
 
@@ -73,9 +73,9 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
      */
     @NonNull
     @Override
-    public RecordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.lore_entryselection, parent, false);
-        return new RecordViewHolder(view);
+    public EntrySelectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View entrySelectionView = inflater.inflate(R.layout.lore_entryselection, parent, false);
+        return new EntrySelectionViewHolder(entrySelectionView);
     }
 
     /**
@@ -88,9 +88,9 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
      * @since 1.0.0
      */
     @Override
-    public void onBindViewHolder(RecordViewHolder holder, int position) {
-        LoreEntrySelectionInformation current = recordData.get(position);
-        holder.recordText.setText(current.getLoreEntryName());
+    public void onBindViewHolder(EntrySelectionViewHolder holder, int position) {
+        LoreEntrySelectionInformation current = entrySelectionInformation.get(position);
+        holder.entrySelectionText.setText(current.getEntryName());
     }
 
     /**
@@ -102,7 +102,7 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
      */
     @Override
     public int getItemCount() {
-        return recordData.size();
+        return entrySelectionInformation.size();
     }
 
     /**
@@ -111,7 +111,7 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
      * @version 1.0.0
      * @since 1.0.0
      */
-    class RecordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class EntrySelectionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         /**
          * The Lore Entry Selection text.
@@ -119,7 +119,7 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
          * @version 1.0.0
          * @since 1.0.0
          */
-        TextView recordText;
+        TextView entrySelectionText;
 
         /**
          * Instantiates a new Record view holder.
@@ -128,10 +128,10 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
          * @version 1.0.0
          * @since 1.0.0
          */
-        public RecordViewHolder(View itemView) {
+        public EntrySelectionViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            recordText = itemView.findViewById(R.id.bookName);
+            entrySelectionText = itemView.findViewById(R.id.selectionName);
         }
 
         /**
@@ -143,12 +143,12 @@ public class LoreEntrySelectionAdapter extends RecyclerView.Adapter<LoreEntrySel
          */
         @Override
         public void onClick(View view) {
-            LoreEntrySelectionInformation info = recordData.get(getAdapterPosition());
+            LoreEntrySelectionInformation information = entrySelectionInformation.get(getAdapterPosition());
 
-            LoreEntryFragment loreEntryFragment = new LoreEntryFragment();
-            loreEntryFragment.setInfo(info);
+            LoreEntryFragment entryFragment = new LoreEntryFragment();
+            entryFragment.setEntrySelectionInformation(information);
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.loreBooksActivity, loreEntryFragment, "LoreEntryFragment").addToBackStack(null).commit();
+            transaction.add(R.id.loreBooksActivity, entryFragment, "LoreEntryFragment").addToBackStack(null).commit();
         }
     }
 }

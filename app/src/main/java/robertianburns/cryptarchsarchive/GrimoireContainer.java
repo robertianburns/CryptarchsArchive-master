@@ -8,24 +8,39 @@ import java.util.Objects;
 
 /**
  * The Grimoire container.
+ * <p>
+ * Java Containers provide functionality, such as handling web request, provide user authentication,
+ * logging, or the connection to a database. GrimoireContainer is used to grab grimoire and apply
+ * them to setters.
  *
  * @version 1.0.0
  * @since 1.0.0
  */
 public class GrimoireContainer {
     private static volatile GrimoireContainer object;
-    private JsonArray themeCollection;
-    private JsonArray pageCollection;
+
+    /* Bungie ordered the Grimoire as:
+     * THEME (i.e. Enemies) > PAGE (i.e. Fallen) > CARD (i.e. Dreg)
+     *
+     * I changed it to:
+     * SECTION (for a section of the Grimoire) > CATEGORY (for a category of the section) > CARD
+     * (for a card of the category) as this is easier for me to 'visualise' what is what.
+     *
+     * This is why there are still 'theme' and 'page' tags (as Bungie uses them), even though I
+     * don't personally use those words for variables.
+     */
+    private JsonArray sectionCollection;
+    private JsonArray categoryCollection;
     private JsonArray cardCollection;
     private JsonObject cardJson;
-    private String theme;
-    private String page;
+    private String section;
+    private String category;
     private String card;
 
     /**
      * Creates a new GrimoireContainer object.
      * <p>
-     * Using 'synchronized' so different threads can read and write to the same variables, objects,
+     * Used 'synchronized' so different threads can read and write to the same variables, objects,
      * and resources. If it couldn't get the GrimoireContainer object then a new object is made.
      *
      * @return Grimoire Card object.
@@ -48,39 +63,39 @@ public class GrimoireContainer {
      */
 
     /**
-     * Gets the themeCollection.
+     * Gets the sectionCollection.
      *
-     * @return Returns themeCollection.
+     * @return Returns sectionCollection.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public JsonArray getThemeCollection() {
-        return themeCollection;
+    public JsonArray getSectionCollection() {
+        return sectionCollection;
     }
 
     /**
-     * Sets the themeCollection.
+     * Sets the sectionCollection.
      *
-     * @param themeCollection The theme collection.
+     * @param sectionCollection The section collection.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public void setThemeCollection(JsonArray themeCollection) {
-        if (this.themeCollection == null) {
-            this.themeCollection = themeCollection;
+    public void setSectionCollection(JsonArray sectionCollection) {
+        if (this.sectionCollection == null) {
+            this.sectionCollection = sectionCollection;
         }
     }
 
     /**
-     * Gets the pageCollection.
+     * Gets the categoryCollection.
      *
-     * @return Returns pageCollection.
+     * @return Returns categoryCollection.
      * @author Robert Burns
      * @version 1.0.0
      * @since 1.0.0
      */
-    public JsonArray getPageCollection() {
-        return pageCollection;
+    public JsonArray getCategoryCollection() {
+        return categoryCollection;
     }
 
     /**
@@ -111,26 +126,26 @@ public class GrimoireContainer {
     }
 
     /**
-     * Sets the theme.
+     * Sets the section.
      *
-     * @param theme The theme.
+     * @param section The section.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public void setTheme(String theme) {
-        this.theme = theme;
+    public void setSection(String section) {
+        this.section = section;
         setPageCollection();
     }
 
     /**
-     * Sets the page.
+     * Sets the category.
      *
-     * @param page The Grimoire Page.
+     * @param category The Grimoire Page.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public void setPage(String page) {
-        this.page = page;
+    public void setCategory(String category) {
+        this.category = category;
         setCardCollection();
     }
 
@@ -147,13 +162,13 @@ public class GrimoireContainer {
     }
 
     /**
-     * Sets the page collection.
+     * Sets the category collection.
      *
      * @version 1.0.0
      * @since 1.0.0
      */
     private void setPageCollection() {
-        pageCollection = Objects.requireNonNull(getJsonObjectFromArray(themeCollection, "themeId", theme)).getAsJsonArray("pageCollection");
+        categoryCollection = Objects.requireNonNull(getJsonObjectFromArray(sectionCollection, "themeId", section)).getAsJsonArray("pageCollection");
     }
 
     /**
@@ -163,7 +178,7 @@ public class GrimoireContainer {
      * @since 1.0.0
      */
     private void setCardCollection() {
-        cardCollection = Objects.requireNonNull(getJsonObjectFromArray(pageCollection, "pageName", page)).getAsJsonArray("cardCollection");
+        cardCollection = Objects.requireNonNull(getJsonObjectFromArray(categoryCollection, "pageName", category)).getAsJsonArray("cardCollection");
     }
 
     /**
@@ -180,7 +195,7 @@ public class GrimoireContainer {
      * Get a JSON object from the array. Using a for loop, return the JSON object.
      * <p>
      * This is used for retrieving objects, and to set retrievable those objects into things like
-     * the theme, the page, the page collection, the card collection, and the card ID.
+     * the section, the category, the category collection, the card collection, and the card ID.
      *
      * @return The JSON object from the JSON array.
      * @version 1.0.0

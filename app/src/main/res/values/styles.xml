@@ -1,9 +1,12 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Base application theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
+    <!-- Base application section -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">#000</item>
+        <item name="android:statusBarColor">#000</item>
+    </style>
 
-    <!-- Base activity theme -->
+    <!-- Base activity section -->
     <style name="ActivityTheme.Primary.Base.Light" parent="Theme.AppCompat.NoActionBar" />
 
     <style name="AppTheme.NoActionBar">

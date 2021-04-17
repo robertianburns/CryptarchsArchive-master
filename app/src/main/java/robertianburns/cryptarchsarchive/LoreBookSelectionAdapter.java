@@ -56,7 +56,7 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
      * @version 1.0.0
      * @since 1.0.0
      */
-    List<LoreBookSelectionInformation> loreBookSelectionData;
+    List<LoreBookSelectionInformation> bookSelectionData;
 
     /**
      * The entry ID map.
@@ -77,16 +77,16 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
     /**
      * Instantiates a new LoreBookSelection adapter.
      *
-     * @param context               The context.
-     * @param loreBookSelectionData The LoreBookSelection data.
-     * @param fragmentManager       The fragment manager.
+     * @param context           The context.
+     * @param bookSelectionData The LoreBookSelection data.
+     * @param fragmentManager   The fragment manager.
      * @version 1.0.0
      * @since 1.0.0
      */
-    public LoreBookSelectionAdapter(Context context, List<LoreBookSelectionInformation> loreBookSelectionData, FragmentManager fragmentManager) {
+    public LoreBookSelectionAdapter(Context context, List<LoreBookSelectionInformation> bookSelectionData, FragmentManager fragmentManager) {
         super();
         this.inflater = LayoutInflater.from(context);
-        this.loreBookSelectionData = loreBookSelectionData;
+        this.bookSelectionData = bookSelectionData;
         this.database = ManifestDatabase.getInstance(context);
         this.fragmentManager = fragmentManager;
         loadLoreEntries();
@@ -114,8 +114,8 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
 
     /**
      * This method is called by RecyclerView to display the data at the specified position. This
-     * updates the contents of the RecyclerView.ViewHolder.itemView to reflect the Lore Book at the
-     * given position. This method is overridden if Adapter can handle efficient partial bind.
+     * updates the contents of the ViewHolder to reflect the Lore Book at the given position. This
+     * method is overridden if Adapter can handle efficient partial bind.
      *
      * @param holder   The ViewHolder which should be updated to represent the contents of the item
      *                 at the given position in the data set.
@@ -123,10 +123,10 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
      */
     @Override
     public void onBindViewHolder(LoreBookSelectionViewHolder holder, int position) {
-        LoreBookSelectionInformation current = loreBookSelectionData.get(position);
+        LoreBookSelectionInformation current = bookSelectionData.get(position);
 
-        holder.bookIcon.setImageResource(current.getIconID());
-        holder.bookName.setText(current.getNodeName());
+        holder.bookIcon.setImageResource(current.getBookIconID());
+        holder.bookName.setText(current.getBookName());
     }
 
     /**
@@ -136,7 +136,7 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
      */
     @Override
     public int getItemCount() {
-        return loreBookSelectionData.size();
+        return bookSelectionData.size();
     }
 
     /**
@@ -145,8 +145,8 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
      * <p>
      * This method creates the entries of Lore Books of a Lore Book in the selection menu by
      * creating a new Runnable that is put into a thread, and pairs the entry's name with its ID.
-     * If a presentation node (Lore Book) has an associated 'Record' (entry), then
-     * <b>RecordHash</b> is the identifier of that Record.
+     * If a presentation node (Lore Book) has an associated 'Record' (entry), then <b>RecordHash</b>
+     * is the identifier of that Record.
      *
      * @version 1.0.0
      * @since 1.0.0
@@ -155,10 +155,10 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
         entryIDMap = new ConcurrentHashMap<>();
         entryIDThreads = new ThreadGroup("entryIDThreads");
 
-        for (int i = 0; i < loreBookSelectionData.size(); i++) {
+        for (int i = 0; i < bookSelectionData.size(); i++) {
 
-            final String entryName = loreBookSelectionData.get(i).getNodeName();
-            final long entryID = loreBookSelectionData.get(i).getNodeID();
+            final String entryName = bookSelectionData.get(i).getBookName();
+            final long entryID = bookSelectionData.get(i).getBookID();
 
             new Thread(entryIDThreads, new Runnable() {
                 @Override
@@ -187,11 +187,12 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
     /**
      * Converts the hash for 'presentationNode'.
      * <p>
-     * This converts the hash identifier of the Presentation Node for whom we should return
-     * details for using a convert hash method.
+     * This converts the hash identifier of the Presentation Node for whom we should return details
+     * for using a convert hash method.
      * <p>
-     * When entities refer to each other in Destiny content, it is this hash that they are
-     * referring to.
+     * Hashes are unique identifier for Destiny entities, and are guaranteed to be unique for the
+     * type of entity, but not globally. When entities refer to each other in Destiny content, it
+     * is this hash that they are referring to.
      *
      * @param hash The hash identifier of the Presentation Node.
      * @return The converted Presentation Node hash identifier.
@@ -242,7 +243,7 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
             super(itemView);
             itemView.setOnClickListener(this);
             bookIcon = itemView.findViewById(R.id.bookIcon);
-            bookName = itemView.findViewById(R.id.bookName);
+            bookName = itemView.findViewById(R.id.selectionName);
         }
 
         /**
@@ -271,7 +272,7 @@ public class LoreBookSelectionAdapter extends RecyclerView.Adapter<LoreBookSelec
             }
             LoreEntrySelectionFragment entryFragment = new LoreEntrySelectionFragment();
             entryFragment.setName(name);
-            entryFragment.setloreEntrySelectionIDs(entryIDMap.get(name));
+            entryFragment.setEntrySelectionIDs(entryIDMap.get(name));
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.loreBooksActivity, entryFragment, "LoreEntrySelectionFragment").addToBackStack(null).commit();
         }

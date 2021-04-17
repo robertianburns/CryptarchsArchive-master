@@ -12,11 +12,11 @@ import com.huma.room_for_asset.RoomAsset;
 /**
  * This marks DataAccessObject as classes of RoomDatabase. As Cryptarch's Archive manages
  * significant amounts of structured data, it benefits from persisting that data locally. Relevant
- * pieces of data (Grimoire and Lore) are cached, so when the device cannot access the network,
- * the user can still browse that content while they are offline.
+ * pieces of data (Grimoire and Lore) are cached, so when the device cannot access the network, the
+ * user can still browse that content while they are offline.
  * <p>
- * ManifestDatabase instance is volatile so the value of a field becomes visible to all readers
- * (other threads) after a completed write operation.
+ * ManifestDatabase databaseInstance is volatile so the value of a field becomes visible to all
+ * readers (other threads) after a completed write operation.
  *
  * @version 1.0.0
  * @since 1.0.0
@@ -24,26 +24,26 @@ import com.huma.room_for_asset.RoomAsset;
 @Database(entities = {DataAccessObject_LoreBookSelectionDefinition.class, DataAccessObject_LoreEntrySelectionDefinition.class, DataAccessObject_LoreEntryDefinition.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class ManifestDatabase extends RoomDatabase {
-    private static volatile ManifestDatabase instance;
+    private static volatile ManifestDatabase databaseInstance;
 
     /**
-     * Gets database instance.
+     * Gets the database instance. The database is initialised if there is no instance.
      *
      * @param context The context.
-     * @return The database instance.
+     * @return The database databaseInstance.
      * @version 1.0.0
      * @since 1.0.0
      */
     public static ManifestDatabase getInstance(Context context) {
-        if (instance == null) {
+        if (databaseInstance == null) {
             initialiseDatabase(context);
         }
-        return instance;
+        return databaseInstance;
     }
 
     /**
-     * This method builds the Destiny 2 lore database. The lore database is deleted and recreated
-     * if the application version doesn't match up with the build configuration version.
+     * Builds the Destiny 2 lore database. The lore database is deleted and recreated if the
+     * application version doesn't match up with the build configuration version.
      * <p>
      * This accesses and modifies preference data. This is so no matter the set of preferences,
      * there is a single preference instance that all users share. Objects that are returned from
@@ -58,7 +58,7 @@ public abstract class ManifestDatabase extends RoomDatabase {
      */
     private static void initialiseDatabase(Context context) {
         synchronized (ManifestDatabase.class) {
-            if (instance == null) {
+            if (databaseInstance == null) {
                 int appVersion = PreferenceManager.getDefaultSharedPreferences(context).getInt("appVersion", -1);
 
                 if (appVersion != BuildConfig.VERSION_CODE) {
@@ -67,9 +67,9 @@ public abstract class ManifestDatabase extends RoomDatabase {
                     editor.apply();
                     editor.putBoolean("instantiated", false);
                     editor.commit();
-                    context.deleteDatabase("destiny2_manifest_lore.db");
+                    context.deleteDatabase("destiny2_manifest.db");
                 }
-                instance = RoomAsset.databaseBuilder(context, ManifestDatabase.class, "destiny2_manifest_lore.db").build();
+                databaseInstance = RoomAsset.databaseBuilder(context, ManifestDatabase.class, "destiny2_manifest.db").build();
             }
         }
     }

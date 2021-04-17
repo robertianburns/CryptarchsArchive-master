@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,19 +29,18 @@ public class LoreMainmenuActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ManifestDatabase database;
     private Thread getNodeChildrenThread;
-    private ImageButton prevView;
+    private ImageButton sectionImageButton;
 
     /**
      * Creates the <b>Lore Page/lore_entry.</b>
      * <p>
-     * This method grabs objects from the database and compiles them to create a Lore Page. A
-     * Lore Page is compiled from:
+     * This method grabs objects from the database and compiles them to create a Lore Page. A Lore
+     * Page is compiled from:
      * <ul>
      *     <li><b>title</b>, the title associated with the Lore Page.</li>
      *     <li><b>entryText</b>, the description associated with the Lore Page.</li>
      * <ul/>
      *
-     * @return The chosen Lore Page.
      * @version 1.0.0
      * @since 1.0.0
      */
@@ -53,15 +53,13 @@ public class LoreMainmenuActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lore_mainmenu);
-
-        recyclerView = (RecyclerView) findViewById(R.id.bookArea);
-        prevView = (ImageButton) findViewById(R.id.theLightButton);
+        recyclerView = findViewById(R.id.bookArea);
 
 //      Pre-select 'The Light' Lore Books when lore_mainmenu's loads.
-        showBooks(findViewById(R.id.theLightButton));
+        sectionImageButton = findViewById(R.id.sectionButton);
+        showBooks(findViewById(R.id.sectionButton));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     /**
@@ -73,8 +71,8 @@ public class LoreMainmenuActivity extends AppCompatActivity {
      */
     public void showBooks(View view) {
         try {
-            prevView.setBackgroundTintList(null);
-            prevView = (ImageButton) view;
+            sectionImageButton.setBackgroundTintList(null);
+            sectionImageButton = (ImageButton) view;
 
 //          Returns the ColorStateList from loreSectionSelectedColour, and sets that to tint the
 //          currently selected Lore Book Section.
@@ -89,25 +87,25 @@ public class LoreMainmenuActivity extends AppCompatActivity {
             }
 
             long[] nodes = bookMap.get(name);
-            final ArrayList<LoreBookSelectionInformation> loreBookSelectionInformationList = new ArrayList<>();
-            final ArrayList<Long> nodeId = new ArrayList<>(1);
-            nodeId.add(0L);
+            final ArrayList<LoreBookSelectionInformation> bookSelectionInformationList = new ArrayList<>();
+            final ArrayList<Long> nodeID = new ArrayList<>(1);
+            nodeID.add(0L); // 0L means the number zero of type long.
 
-            for (long node : nodes) {
-                nodeId.set(0, node);
+            for (long node : Objects.requireNonNull(nodes)) {
+                nodeID.set(0, node);
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            List<DataAccessObject_LoreBookSelectionDefinition> list = database.getDao().getPresentationNodeById(nodeId);
+                            List<DataAccessObject_LoreBookSelectionDefinition> list = database.getDao().getPresentationNodeById(nodeID);
                             JsonObject json = list.get(0).getJson();
                             String bookName = json.getAsJsonObject("displayProperties").get("name").getAsString();
                             // Sometimes Bungie adds a lore book but makes it inaccessible until they release it.
                             if (bookName.equals("Classified") || bookName.isEmpty()) {
                                 return;
                             }
-                            int bookImg = getImageResource(bookName);
-                            loreBookSelectionInformationList.add(new LoreBookSelectionInformation(bookImg, bookName, list.get(0).getID()));
+                            int bookImage = getImageResource(bookName);
+                            bookSelectionInformationList.add(new LoreBookSelectionInformation(bookImage, bookName, list.get(0).getID()));
                         } catch (Exception exception) {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -125,8 +123,8 @@ public class LoreMainmenuActivity extends AppCompatActivity {
                     interruptedexception.printStackTrace();
                 }
             }
-            LoreBookSelectionAdapter loreBookSelectionAdapter = new LoreBookSelectionAdapter(this, loreBookSelectionInformationList, getFragmentManager());
-            recyclerView.setAdapter(loreBookSelectionAdapter);
+            LoreBookSelectionAdapter bookSelectionAdapter = new LoreBookSelectionAdapter(this, bookSelectionInformationList, getFragmentManager());
+            recyclerView.setAdapter(bookSelectionAdapter);
         } catch (Exception exception) {
             Toast.makeText(this, "Unable to load Lore Books", Toast.LENGTH_LONG).show();
         }
@@ -137,12 +135,13 @@ public class LoreMainmenuActivity extends AppCompatActivity {
     /**
      * Converts the hash for 'presentationNode'.
      * <p>
-     * This converts the hash identifier of the Presentation Node for whom we should return
-     * details for using a convert hash method. Details will only be returned for Lore Books that
-     * are direct descendants of this node.
+     * This converts the hash identifier of the Presentation Node for whom we should return details
+     * for using a convert hash method. Details will only be returned for Lore Books that are direct
+     * descendants of this node.
      * <p>
-     * When entities refer to each other in Destiny content, it is this hash that they are
-     * referring to.
+     * Hashes are unique identifier for Destiny entities, and are guaranteed to be unique for the
+     * type of entity, but not globally. When entities refer to each other in Destiny content, it is
+     * this hash that they are referring to.
      *
      * @param hash The hash identifier of the Presentation Node.
      * @return The converted Presentation Node hash identifier.
@@ -179,9 +178,9 @@ public class LoreMainmenuActivity extends AppCompatActivity {
     /**
      * Loads the Lore Books in 'lore_mainmenu'.
      * <p>
-     * This method uses multiple loops to get the books and IDs of the Lore Books in the three
-     * Lore Sections. The Lore Books IDs are grabbed and their presentationNodeHashes are converted
-     * to be paired with the corresponding Lore Book's name.
+     * This method uses multiple loops to get the books and IDs of the Lore Books in the three Lore
+     * Sections. The Lore Books IDs are grabbed and their presentationNodeHashes are converted to be
+     * paired with the corresponding Lore Book's name.
      *
      * @version 1.0.0
      * @since 1.0.0
@@ -212,13 +211,13 @@ public class LoreMainmenuActivity extends AppCompatActivity {
         public void run() {
             try {
                 for (String book : books) {
-                    DataAccessObject_LoreBookSelectionDefinition loreSection = database.getDao().getPresentationNodeByText("%" + book + "%").get(0);
-                    JsonObject loreSectionJson = loreSection.getJson();
-                    JsonArray loreBookNodes = loreSectionJson.getAsJsonObject("children").getAsJsonArray("presentationNodes");
+                    DataAccessObject_LoreBookSelectionDefinition section = database.getDao().getPresentationNodeByText("%" + book + "%").get(0);
+                    JsonObject sectionJson = section.getJson();
+                    JsonArray bookNodes = sectionJson.getAsJsonObject("children").getAsJsonArray("presentationNodes");
 
-                    long[] id = new long[loreBookNodes.size()];
-                    for (int i = 0; i < loreBookNodes.size(); i++) {
-                        JsonObject loreBook = (JsonObject) loreBookNodes.get(i);
+                    long[] id = new long[bookNodes.size()];
+                    for (int i = 0; i < bookNodes.size(); i++) {
+                        JsonObject loreBook = (JsonObject) bookNodes.get(i);
                         long hash = Long.parseLong(loreBook.get("presentationNodeHash").getAsString());
                         id[i] = convertHash(hash);
                     }

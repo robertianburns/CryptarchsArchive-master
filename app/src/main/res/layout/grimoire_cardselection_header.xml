@@ -2,20 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/backgroundColour"
+    android:background="@drawable/buttonsquareheader"
     android:orientation="horizontal"
     android:weightSum="100">
 
     <TextView
-        android:id="@+id/selectionHeaderLabel"
+        android:id="@+id/selectionHeaderText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="40"
+        android:layout_margin="5dp"
+        android:layout_weight="7"
         android:fontFamily="sans-serif-light"
+        android:padding="5dp"
         android:text="@string/header_text_unavailable"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/textColour"
         android:textSize="24sp"
         android:textStyle="bold" />
